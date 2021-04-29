@@ -1,32 +1,25 @@
 version: "3.5"
 
 services:
-#mariadb Container
-  mariadb:
-    image: mariadb:latest
-    container_name: mariadb-glpi
-    hostname: mariadb
+  db-mysql:
+    image: mysql:5.7
     volumes:
-      - glpi-db:/var/lib/mysql
+      - ./glpi-db:/var/lib/mysql
     env_file:
       - ./mariadb.env
-    restart: always
+    restart: unless-stopped
 
-#GLPI Container
-  glpi:
-    image: aguyonnet/glpi
-    container_name : glpi
-    hostname: glpi
+  app:
+    image: astekalab/glpi:$GLPI_VERSION
+    build:
+      context: app/
     ports:
-      - "80:80"
+      - 8008:80
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - glpi-data:/var/www/html/glpi
-    environment:
-      - TIMEZONE=Europe/Paris
-    restart: always
-    
-volumes:
-  glpi-db:
-  glpi-data:
+      - ./glpi-data:/var/www/html/glpi
+#    environment:
+#      - TIMEZONE=America/Sao_Paulo
+    restart: unless-stopped
+
