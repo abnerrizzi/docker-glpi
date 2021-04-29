@@ -19,7 +19,6 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - ./glpi-data:/var/www/html/glpi
-#    environment:
-#      - TIMEZONE=America/Sao_Paulo
+      - TIMEZONE=America/Sao_Paulo
     restart: unless-stopped
 
